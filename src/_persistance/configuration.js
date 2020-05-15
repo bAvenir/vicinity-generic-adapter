@@ -17,3 +17,4 @@ config.dbHost = process.env.PERSISTANCE_DB_HOST || "cache-db";
 config.dbPort = process.env.PERSISTANCE_DB_PORT || 6379;
 config.cache = process.env.PERSISTANCE_CACHE === 'enabled';
 config.cacheTtl = process.env.PERSISTANCE_CACHE_TTL || 60; // One minute TTL is default
+config.rootPath = process.env.NODE_PATH;

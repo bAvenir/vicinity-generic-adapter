@@ -8,6 +8,7 @@ const Log = require('../_classes/logger');
 const fileMgmt = require('./_modules/fileMgmt');
 const redis = require('./_modules/redis');
 const services = require('./services');
+const config = require('./configuration');
 
 // External files
 
@@ -17,7 +18,7 @@ const services = require('./services');
 module.exports.loadConfigurationFile = async function(fileType){
     let logger = new Log();
     try{ 
-        let file = await fileMgmt.read(`./agent/imports/${fileType}.json`);
+        let file = await fileMgmt.read(`${config.rootPath}/agent/imports/${fileType}.json`);
         let array = JSON.parse(file);
         let countRows = array.length;
         if(countRows>0){
@@ -40,7 +41,7 @@ module.exports.saveConfigurationFile = async function(fileType){
     let logger = new Log();
     try{ 
         let data = await services.getFromMemory(fileType);
-        await fileMgmt.write(`./agent/exports/${fileType}.json`, data);
+        await fileMgmt.write(`${config.rootPath}/agent/exports/${fileType}.json`, data);
         return Promise.resolve(true);
     } catch(err) {
         logger.error(err, "PERSISTANCE")
