@@ -30,7 +30,7 @@ module.exports.loadConfigurationFile = async function(fileType){
         }
     } catch(err) {
         logger.error(err, "PERSISTANCE")
-        return Promise.reject(false)
+        return Promise.resolve(false)
     }
 }
 

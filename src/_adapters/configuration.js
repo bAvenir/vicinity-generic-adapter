@@ -15,3 +15,4 @@ let config = module.exports = {};
 config.responseMode = process.env.ADAPTER_RESPONSE_MODE || "dummy";
 config.dataCollectionMode = process.env.ADAPTER_DATA_COLLECTION_MODE || "dummy";
 config.proxyUrl = process.env.ADAPTER_PROXY_URL || "http://localhost:8000";
+config.serviceOid = process.env.ADAPTER_SERVICE_OID || null;

@@ -127,7 +127,9 @@ services.activateEventChannels = async function(oid, events){
 services.subscribeEvents = async function(oid, subscribers){
         try{
             for(let i=0, l=subscribers.length; i<l; i++){
-                await gateway.subscribeRemoteEventChannel(oid, subscribers[i].oid, subscribers[i].eid);
+                if(subscribers[i].interaction === "event"){
+                    await gateway.subscribeRemoteEventChannel(oid ,subscribers[i].oid, subscribers[i].eid);
+                }            
             }
         }catch(err){
             return Promise.reject(err);
@@ -140,7 +142,9 @@ services.subscribeEvents = async function(oid, subscribers){
 services.unsubscribeEvents = async function(oid, subscribers){
     try{
         for(let i=0, l=subscribers.length; i<l; i++){
-            await gateway.unsubscribeRemoteEventChannel(oid ,subscribers[i].oid, subscribers[i].eid);
+            if(subscribers[i].interaction === "event"){
+                await gateway.unsubscribeRemoteEventChannel(oid ,subscribers[i].oid, subscribers[i].eid);
+            }
         }
     }catch(err){
         return Promise.reject(err);

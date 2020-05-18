@@ -334,3 +334,15 @@ module.exports.discovery = function(req, res){
         adapter.proxyReceiveEvent(oid, eid, body);
         res.send('Event received');
     }
+
+    // Get all properties automatically
+
+    module.exports.getAutoPropertiesEnable = function(req, res){
+        adapter.startPropertiesCollection();
+        res.send('Automatic data collection enabled');
+    }
+
+    module.exports.getAutoPropertiesDisable = function(req, res){
+        adapter.stopPropertiesCollection();
+        res.send('Automatic data collection disabled');
+    }

@@ -4,7 +4,7 @@
   "description": "bAvenir generic adapter to VICINITY",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=. node index.js",
+    "start": "NODE_PATH=/Users/jorgealmela/Documents/Projects/CrossProject/Adapters/bavenir-adapter node index.js",
     "dev": "nodemon --ignore '**/*.json' index.js",
     "test": "jest --coverage",
     "analyze": "node sonar-scanner.js"

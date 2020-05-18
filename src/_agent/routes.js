@@ -24,6 +24,8 @@ router
     // ***** Consume remote resources *****
   .get('/properties/:id/:oid/:pid', controller.getProperty) // Request remote property
   .put('/properties/:id/:oid/:pid', controller.putProperty) // Update remote property
+  .get('/properties/all/enable', controller.getAutoPropertiesEnable)
+  .get('/properties/all/disable',controller.getAutoPropertiesDisable)
   // .get('/actions/:id/:oid/:aid/:tid') // Get action status
   // .post('/actions/:id/:oid/:aid') // Start task on remote action
   // .put('/actions/:id/:oid/:aid') // Update status of task

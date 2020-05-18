@@ -213,7 +213,7 @@ async function _storeMapper(array){
     let logger = new Log();
     try{  
         for(let i=0, l=array.length; i<l; i++){
-            if(array[i].oid && array[i].event){
+            if(array[i].oid && array[i].interaction){
                 await redis.sadd('MAPPERS', `${array[i].oid}:${array[i].interaction}:${array[i].interaction_id}`);
             }
         }

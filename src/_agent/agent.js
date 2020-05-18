@@ -29,8 +29,8 @@ module.exports.initialize = async function(){
 
         // Load mappings and configurations
        await persistance.loadConfigurationFile('mapper');
-       await persistance.loadConfigurationFile('properties');
-       await persistance.loadConfigurationFile('events');
+    //    await persistance.loadConfigurationFile('properties');
+    //    await persistance.loadConfigurationFile('events');
 
         // Login objects
         await services.doLogins(registrations);
@@ -50,7 +50,7 @@ module.exports.initialize = async function(){
         logger.info('All event channels created!', 'AGENT');
 
         // Subscribe event channels
-        await services.subscribeEvents();
+        await this.subscribeEvents();
 
         // Store configuration info
         await persistance.reloadConfigInfo();

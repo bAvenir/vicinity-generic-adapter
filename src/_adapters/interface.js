@@ -12,6 +12,7 @@
 // Import logger
 const Log = require('../_classes/logger');
 const persistance =  require('../_persistance/interface');
+const CustomTimer = require('./propertiesTimer');
 // Configuration Modes
 const config = require('./configuration');
 const responseMode = config.responseMode;
@@ -21,8 +22,12 @@ const proxyUrl = config.proxyUrl;
 const dummyModule = require('./_modules/dummy');
 const proxyModule = require('./_modules/proxy');
 
+
+// Create global events object
+let propertiesCollector = new CustomTimer();
+
 // TBD Include other adapter modules when available
-// TBD Handle events and actions sent by gtw
+// TBD Handle actions sent by gtw
 
 /**
  * Redirects incoming property requests
@@ -95,7 +100,6 @@ module.exports.proxySetProperty = async function(oid, pid, body){
  */
 module.exports.proxyReceiveEvent = async function(oid, eid, body){
     let logger = new Log();
-    let result;
     try{ 
         // TBD Check if combination of oid + pid exists
 
@@ -114,4 +118,26 @@ module.exports.proxyReceiveEvent = async function(oid, eid, body){
     } catch(err) {
         logger.error(err, "ADAPTER")
     }
+}
+
+
+/**
+ * Starts collection of properties
+ * Uses mapper.json to find what requests have to be done
+ */
+module.exports.startPropertiesCollection = function(){
+    let logger = new Log();
+    propertiesCollector.start();
+    logger.info('Automatic properties collection started', 'ADAPTER');
+}
+
+
+/**
+ * Stops collection of properties
+ * Uses mapper.json to find what requests have to be done
+ */
+module.exports.stopPropertiesCollection = function(){
+    let logger = new Log();
+    propertiesCollector.stop();
+    logger.info('Automatic properties collection stopped', 'ADAPTER');
 }
