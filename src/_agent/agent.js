@@ -27,6 +27,11 @@ module.exports.initialize = async function(){
         // Get objects OIDs stored locally
         let registrations = await persistance.getLocalObjects();
 
+        // Load mappings and configurations
+       await persistance.loadConfigurationFile('mapper');
+       await persistance.loadConfigurationFile('properties');
+       await persistance.loadConfigurationFile('events');
+
         // Login objects
         await services.doLogins(registrations);
 
@@ -43,6 +48,9 @@ module.exports.initialize = async function(){
             if(events.length > 0) await services.activateEventChannels(registrations[i], events);
         }
         logger.info('All event channels created!', 'AGENT');
+
+        // Subscribe event channels
+        await services.subscribeEvents();
 
         // Store configuration info
         await persistance.reloadConfigInfo();
@@ -97,6 +105,36 @@ module.exports.importFromFile = async function(type){
 module.exports.exportToFile = async function(type){
     try{
         await persistance.saveConfigurationFile(type);
+        return Promise.resolve(true);
+    }catch(err){
+        return Promise.reject(err);
+    }
+}
+
+/**
+* Subscribes service to all events defined in mapper.json
+*/
+module.exports.subscribeEvents = async function(){
+    try{
+        let subscriptions = await persistance.getMappers();
+        let oid = config.serviceOid;
+        if(!oid) throw new Error('There is no service assigned for data collection...');
+        await services.subscribeEvents(oid, subscriptions);
+        return Promise.resolve(true);
+    }catch(err){
+        return Promise.reject(err);
+    }
+}
+
+/**
+ * Unsubscribes service from all events defined in mapper.json
+ */
+module.exports.unsubscribeEvents = async function(){
+    try{
+        let subscriptions = await persistance.getMappers();
+        let oid = config.serviceOid;
+        if(!oid) throw new Error('There is no service assigned for data collection...');
+        await services.unsubscribeEvents(oid, subscriptions);
         return Promise.resolve(true);
     }catch(err){
         return Promise.reject(err);

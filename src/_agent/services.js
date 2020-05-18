@@ -121,4 +121,30 @@ services.activateEventChannels = async function(oid, events){
     }
 }
 
+/**
+ * Subscribe all events in mapper.json
+ */
+services.subscribeEvents = async function(oid, subscribers){
+        try{
+            for(let i=0, l=subscribers.length; i<l; i++){
+                await gateway.subscribeRemoteEventChannel(oid, subscribers[i].oid, subscribers[i].eid);
+            }
+        }catch(err){
+            return Promise.reject(err);
+        }
+    }
+
+/**
+ * Unsubscribe all events in mapper.json
+ */
+services.unsubscribeEvents = async function(oid, subscribers){
+    try{
+        for(let i=0, l=subscribers.length; i<l; i++){
+            await gateway.unsubscribeRemoteEventChannel(oid ,subscribers[i].oid, subscribers[i].eid);
+        }
+    }catch(err){
+        return Promise.reject(err);
+    }
+}
+
 module.exports = services;

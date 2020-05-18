@@ -20,3 +20,4 @@ config.timeout = process.env.GTW_TIMEOUT || '10000';
 config.gatewayId = process.env.GTW_ID;
 config.gatewayPwd = process.env.GTW_PWD;
 config.gatewayCredentials = 'Basic ' +  Buffer.from(process.env.GTW_ID + ":" + process.env.GTW_PWD).toString('base64');
+config.serviceOid = process.env.ADAPTER_SERVICE_OID || null;

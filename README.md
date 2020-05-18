@@ -86,11 +86,15 @@ Example:
     GTW_ID=""
     GTW_PWD=""
     ## ADAPTER
+    #### OID used for collecting data credentials
+    ADAPTER_SERVICE_OID=""
     #### Response Modes ["dummy", "proxy"]
     ADAPTER_RESPONSE_MODE="dummy"
     #### Collection Modes ["dummy", "proxy"]
     ADAPTER_DATA_COLLECTION_MODE="dummy"
     ADAPTER_PROXY_URL="http://192.168.0.1:8000/proxy"
+    #### Default timer interval 15min = 90000sec
+    ADAPTER_TIMER_INTERVAL=90000
     ## Persistance
     PERSISTANCE_DB="redis"
     PERSISTANCE_DB_HOST="cache-db"

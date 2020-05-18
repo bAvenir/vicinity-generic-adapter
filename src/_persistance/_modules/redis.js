@@ -96,6 +96,40 @@ module.exports = {
       });
     });
   },
+  // BASIC STRING STORAGE & REMOVAL
+  /**
+   * Save a string
+   * Custom defined ttl
+   */
+  set: (key, item, ttl) => {
+    return new Promise(function (resolve, reject) {
+      client.set(key, item, 'EX', ttl, function(err, reply) {
+        if (err) {
+          logger.error(err, "REDIS");
+          reject(false);
+        } else {
+          logger.debug(reply, "REDIS");
+          resolve(true);
+        }
+      });
+    });
+  },
+  /**
+   * Remove manually one key or list stored
+   */
+  remove: (key) => {
+    return new Promise(function (resolve, reject) {
+      client.del(key, function(err, reply) {
+        if (err) {
+          logger.error(err, "REDIS");
+          reject(false);
+        } else {
+          logger.debug(reply, "REDIS");
+          resolve(true);
+        }
+      });
+    });
+  },
   // SETS
   /**
    * Adds item to set
