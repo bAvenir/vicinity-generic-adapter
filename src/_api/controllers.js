@@ -8,6 +8,7 @@ const Log = require('../_classes/logger');
 const persistance =  require('../_persistance/interface');
 const agent = require('../_agent/agent');
 const gateway = require('../_agent/interface');
+const mqttServices = require('../_adapters/_modules/mqtt');
 
 // ADMINISTRATION endpoints
 
@@ -22,7 +23,7 @@ module.exports.getConfiguration = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     }) 
 }
 
@@ -37,7 +38,7 @@ module.exports.reloadConfiguration = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     }) 
 }
 
@@ -55,7 +56,7 @@ module.exports.registrations = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -76,7 +77,7 @@ module.exports.propertiesGet = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -95,7 +96,7 @@ module.exports.propertiesPost = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -109,7 +110,7 @@ module.exports.propertiesDelete = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -128,7 +129,7 @@ module.exports.actionsGet = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -147,7 +148,7 @@ module.exports.actionsPost = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -161,7 +162,7 @@ module.exports.actionsDelete = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -180,7 +181,7 @@ module.exports.eventsGet = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -199,7 +200,7 @@ module.exports.eventsPost = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -213,7 +214,7 @@ module.exports.eventsDelete = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -230,7 +231,7 @@ module.exports.importFile = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
 }
 
@@ -245,8 +246,24 @@ module.exports.exportFile = function(req, res){
     })
     .catch((err) => {
         logger.error(err, "ADMIN");
-        res.json({error: true, message: "Something went wrong, check the logs for more info"})
+        res.status(500).json({error: true, message: "Something went wrong, check the logs for more info"})
     })
+}
+
+// MQTT endpoints
+
+module.exports.mqttController = function(req, res){
+    let path = req.path;
+    let body = req.body || null;
+    let topic = body ? body.topic : null;
+    let n = path.lastIndexOf('/');
+    let action = path.substring(n + 1);
+    try{
+        mqttServices[action](topic);
+        res.json({error: false, message: action + ' DONE'});
+    } catch(err) {
+        res.status(500).json({error: true, message: action + ' FAILED, find more info in the logs...'});
+    }
 }
 
 // HEALTHCHECK endpoints

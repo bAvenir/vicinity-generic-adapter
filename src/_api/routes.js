@@ -38,6 +38,11 @@ router
   .get('/export/properties', controller.exportFile)
   .get('/export/actions', controller.exportFile)
   .get('/export/events', controller.exportFile)
+  // MQTT ADAPTER endpoints
+  .get('/mqtt/connect', controller.mqttController)
+  .get('/mqtt/disconnect', controller.mqttController)
+  .post('/mqtt/subscribe', controller.mqttController)
+  .post('/mqtt/unsubscribe', controller.mqttController)
   // HEALTHCHECK endpoints
   .get('/healthcheck', controller.healthcheck);
 
