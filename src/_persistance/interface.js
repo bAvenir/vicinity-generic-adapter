@@ -21,16 +21,24 @@ module.exports.loadConfigurationFile = async function(fileType){
         let file = await fileMgmt.read(`${config.rootPath}/agent/imports/${fileType}.json`);
         let array = JSON.parse(file);
         let countRows = array.length;
-        if(countRows>0){
+        if(countRows>0 && fileType !== 'mqtt'){
             await services.storeInMemory(fileType, array);
+            return Promise.resolve(array);
+        } else if(fileType === 'mqtt') {
+            logger.info(`File ${fileType}.json loaded ${countRows} topics`, "PERSISTANCE");
             return Promise.resolve(array);
         } else {
             logger.info(`There are no ${fileType} available to load`, "PERSISTANCE");
             return Promise.resolve(array);
         }
     } catch(err) {
-        logger.error(err, "PERSISTANCE")
-        return Promise.resolve(false)
+        if (err.code === 'ENOENT') {
+            logger.warn(`File ${fileType}.json not found`, "PERSISTANCE");
+            return Promise.resolve([]);
+        } else {
+            logger.error(err, "PERSISTANCE");
+            return Promise.resolve(false);
+        }
     }
 }
 
