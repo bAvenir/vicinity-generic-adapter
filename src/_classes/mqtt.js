@@ -88,6 +88,6 @@ let mqtt_package = require("mqtt");
     }
 
     set mqttTopics(x){
-        this._mqttTopics = x;
+        this._mqttTopics.push(x);
     }
 }

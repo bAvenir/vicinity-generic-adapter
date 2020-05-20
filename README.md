@@ -95,6 +95,13 @@ Example:
     ADAPTER_PROXY_URL="http://192.168.0.1:8000/proxy"
     #### Default timer interval 15min = 90000sec
     ADAPTER_TIMER_INTERVAL=90000
+    #### ADAPTER MQTT
+    ADAPTER_MQTT_HOST="host"
+    ADAPTER_MQTT_USER="user"
+    ADAPTER_MQTT_PASSWORD="password"
+    ADAPTER_MQTT_INFRASTRUCTURE_NAME="MQTTTEST"
+    ADAPTER_MQTT_ITEMS_TYPE="core:Device"
+    ADAPTER_MQTT_ITEMS_EVENTS="test"
     ## Persistance
     PERSISTANCE_DB="redis"
     PERSISTANCE_DB_HOST="cache-db"

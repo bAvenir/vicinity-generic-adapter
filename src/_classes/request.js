@@ -61,11 +61,15 @@ module.exports = class Request {
       this._validate();
       logger.debug("Calling... " + this.uri, "REQUEST");
       let response = await request(this.uri, this.options);
-      // logger.debug(JSON.parse(response.request)) // See original request
-      // logger.debug(response.ip)
-      // logger.debug(response.isFromCache)
-      // logger.debug(response.statusCode)
-      return Promise.resolve(JSON.parse(response.body));
+      if(response){
+        // logger.debug(JSON.parse(response.request)) // See original request
+        // logger.debug(response.ip)
+        // logger.debug(response.isFromCache)
+        // logger.debug(response.statusCode)
+        return Promise.resolve(JSON.parse(response.body));
+      } else {
+        return Promise.resolve(response);
+      }
     } catch(err) {
       // logger.error(err, "REQUEST");
       return Promise.reject(err);
