@@ -33,9 +33,8 @@ The first version aims to support the following interactions:
 
 ## How to run
 
-First run **npm install** in the project folder
-
 * Development mode
+    * First run **npm install** in the project folder
     * ./_setup.sh --> Build and run development mode
     * ./_run.sh --> Run
     * ./_stop.sh --> Stop without destroying docker image
