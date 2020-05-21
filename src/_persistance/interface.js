@@ -14,6 +14,7 @@ const config = require('./configuration');
 
 /**
  * Imports configuration files to memory
+ * @param {String} file_name
  */
 module.exports.loadConfigurationFile = async function(fileType){
     let logger = new Log();
@@ -44,6 +45,7 @@ module.exports.loadConfigurationFile = async function(fileType){
 
 /**
  * Exports registrations or interactions to file
+ * @param {String} file_name
  */
 module.exports.saveConfigurationFile = async function(fileType){
     let logger = new Log();
@@ -62,6 +64,7 @@ module.exports.saveConfigurationFile = async function(fileType){
 /**
  * Get credentials for one OID
  * From memory
+ * @param {String} oid
  */
 module.exports.getCredentials = async function(oid){
     let logger = new Log();
@@ -77,6 +80,7 @@ module.exports.getCredentials = async function(oid){
 /**
  * Add new OIDs - VICINTY OBJECTS
  * To memory
+ * @param {String} oid
  */
 module.exports.addCredentials = async function(oid){
     let logger = new Log();
@@ -113,6 +117,7 @@ module.exports.removeCredentials = async function(oids){
  * Get all OIDs - VICINTY OBJECTS
  * Retrieves array of oids or just one oid and complete object (If oid provided)
  * From memory
+ * @param {array} oids VICINITY IDs [OPTIONAL]
  */
 module.exports.getLocalObjects = async function(oid){
     let logger = new Log();
@@ -205,6 +210,8 @@ module.exports.removeInteractionObject = async function(type, id){
 /**
  * Check if incoming request is valid
  * Oid exists in infrastructure and has pid
+ * @param {string} oid
+ * @param {string} pid
  */
 module.exports.combinationExists = async function(oid, pid){
     try{
@@ -279,6 +286,9 @@ module.exports.getConfigDetail = async function(type, id){
 
 /**
  * Add property request to cache
+ * Support for caching incoming requests
+ * @param {string} key path requested
+ * @param {string} data data requested
  */
 module.exports.addToCache = async function(key, data){
     try{

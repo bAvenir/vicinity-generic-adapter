@@ -10,6 +10,10 @@ const gtwInterface = require('./interface');
 const services = require('./services');
 const adapter = require('../_adapters/interface');
 
+/**
+ * Login endpoint
+ * @param {string} id [OPTIONAL - If absent use gateway OID]
+ */
 module.exports.login = function(req, res){
     let oid = req.params.id || null; // If null => Use gtw credentials
     let logger = new Log();
@@ -24,6 +28,10 @@ module.exports.login = function(req, res){
     }) 
 }
 
+/**
+ * Logout endpoint
+ * @param {string} id [OPTIONAL - If absent use gateway OID]
+ */
 module.exports.logout = function(req, res){
     let oid = req.params.id || null; // If null => Use gtw credentials
     let logger = new Log();
@@ -97,6 +105,11 @@ module.exports.removeRegistrations = function(req, res){
     }) 
 }
 
+/**
+ * Discovery endpoint
+ * Check what remote objects can you see
+ * @param {string} id [OPTIONAL - If absent use gateway OID]
+ */
 module.exports.discovery = function(req, res){
     let oid = req.params.id;
     let logger = new Log();

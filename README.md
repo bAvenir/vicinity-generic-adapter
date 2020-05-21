@@ -11,6 +11,8 @@ The first version aims to support the following interactions:
 * Support to GATEWAY EVENTS
 * Management of registrations and credentials
 * Support for creating Thing Descriptions
+* MQTT module to help develop adapter for this technology
+* Atomatic collection of properties using NodeJS timers
 
 ### Future versions
 
@@ -35,13 +37,13 @@ First run **npm install** in the project folder
 
 * Development mode
     * ./_setup.sh --> Build and run development mode
-    * ./run.sh --> Run
-    * ./stop.sh --> Stop without destroying docker image
+    * ./_run.sh --> Run
+    * ./_stop.sh --> Stop without destroying docker image
 
 * Production mode
     * ./_setup.sh -e prod --> Build and run production mode
-    * ./run.sh --> Run
-    * ./stop.sh --> Stop without destroying docker image
+    * ./_run.sh --> Run
+    * ./_stop.sh --> Stop without destroying docker image
   
 * Run development tools
     * npm run test -> for jest tests
@@ -63,6 +65,10 @@ Use a .env file
 * Most of the configuration parameters from the example can be reused for production deployment
 
 * Only GTW_ID and GTW_PWD are **MANDATORY**, it is necessary to have valid VICINITY credentials to run the adapter
+
+* When using automatic data or events collection, it is necessary to define ADAPTER_SERVICE_OID.
+
+* When using the MQTT module, it is necessary to complete the MQTT configuration section as well as extending the module with information on how to parse the incoming messages.
 
 * SONARQUBE section is not mandatory, add only if you use a sonarqube server for static analysis
 
@@ -135,12 +141,17 @@ The use of DOCKER is recommended. It is possible to run the Node.js app, VICINIT
 It is used for persisting configuration and caching common requests.
 
 * Decide if caching should be active --> PERSISTANCE_CACHE="enabled" or "disabled"
+    * Even with caching disabled REDIS will be used for other purposes, and therefore an instance will be always running
 * Decide time to live of cached requests --> PERSISTANCE_CACHE_TTL=60 (in seconds)
 
 A REDIS instance is necessary to run the adapter, however it is possible to configure a connection to a REDIS instance out of DOCKER using:
 
 * PERSISTANCE_DB_HOST="http://my-server" 
 * PERSISTANCE_DB_PORT=my-port-number
+
+NOTE: In production, a redis dump is kept in the HOST machine and can be reused to keep the configuration info between restarts, it is possible to add this feature to development by modifying the file docker-compose-dev.yml and adding a volume to the folder ./redis/data. You can modify the frequency with which redis stores the data from memory to the dump file in ./redis/redis.conf. For more information visit REDIS documentation site.
+
+It is also possible to export the in-memory data to files that can afterwards be imported. For more info check the API docs, import/export.
 
 ## NGINX
 
@@ -154,8 +165,19 @@ NGINX is used as a reverse proxy to improve performance of Node.js app and to te
 
 * It is possible to activate HTTPS with NGINX.
     1. Get certificates
-    2.  Use HTTPS configuration in nginx/nginx.conf (Uncomment and edit required sections)
+    2. Use HTTPS configuration in nginx/nginx.conf (Uncomment and edit required sections)
     3. Add in docker-compose.yml volumes with the path of the certificates in the proxy section
+
+## MQTT
+
+The adapter supports the integration of MQTT data leveraging the NodeJS MQTT package. The connection, disconnection, subscription and unsubscription of channels will be handled by the adapter.
+
+The developer using the adapter will need to extend the MQTT module (./src/_adapters/_modules/mqtt.js), concretely the function _processIncomingMessage(). The task will be to parse the incoming messages based on their structure and use the prebuilt functions _sendEvent() and _registerItem() to publish the result as a VICINITY event or to register the item generating the messages if it was new.
+
+## Documentation
+
+* The folder docs contains helpful resources to register and create interactions.
+* The endpoint localhost/docs displays the API specification.
 
 ## Includes
 
@@ -163,6 +185,8 @@ NGINX is used as a reverse proxy to improve performance of Node.js app and to te
 * Reverse Proxy NGINX
 * DOCKER configuration
 * Persistance and caching REDIS
+* MQTT module
+* Module for automatic collection of data using NodeJS timers
 * Built-in CI with DOCKER
 * Testing
 * Security features 

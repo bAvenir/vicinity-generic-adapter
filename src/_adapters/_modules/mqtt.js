@@ -137,7 +137,7 @@ async function _processIncomingMessage(message, topic){
     //         // Prepare body for registration
     //         // BUILD BODY with .env info about MQTT
     //         // Request registration
-    //         _registerItem(body)
+    //         _registerItem(_buildBody(name));
     //     }
     // } catch(err) {
     //     logger.error(err, 'MQTT');
@@ -204,5 +204,17 @@ async function _initializeMqttItems(){
         logger.info('MQTT items loaded', 'MQTT');
     } catch(err) {
         return Promise.reject(err);
+    }
+}
+
+/**
+ * Prepares information for registration
+ */
+function _buildBody(name){
+    return {
+        name: config.mqtt.infrastructureName + "_" + name,
+        adapterId: name,
+        type: config.mqtt.itemsType,
+        events: config.mqtt.itemsEvents
     }
 }

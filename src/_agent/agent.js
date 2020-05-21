@@ -87,6 +87,7 @@ module.exports.stop = async function(){
  * Does not overwrite, only loads interactions or registrations
  * not existing previously
  * Use delete endpoints to remove interactions or registrations 
+ * @param {String} file_name
  */    
 module.exports.importFromFile = async function(type){
     try{
@@ -101,6 +102,7 @@ module.exports.importFromFile = async function(type){
  * Saves to file all the memory
  * Additional backup possibility
  * Can create 4 different files: 1xRegistrations + 3xInteractions
+ * @param {String} file_name
  */
 module.exports.exportToFile = async function(type){
     try{

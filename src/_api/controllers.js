@@ -46,6 +46,8 @@ module.exports.reloadConfiguration = function(req, res){
 
 /**
  * Get registered items in local infrastructure
+ * @param {string} id [OPTIONAL - If absent get list of all ids]
+ * @returns List of ids or object with info
  */
 module.exports.registrations = function(req, res){
     let id = req.params.id || null; // If null => Use gtw credentials
@@ -68,6 +70,12 @@ module.exports.registrations = function(req, res){
  * POST
  * DELETE
  */
+
+ /**
+ * Get registered properties in local infrastructure
+ * @param {string} id [OPTIONAL - If absent get list of all ids]
+ * @returns List of ids or object with info
+ */
 module.exports.propertiesGet = function(req, res){
     let id = req.params.id || null; // If null => Use gtw credentials
     let logger = new Log();
@@ -81,6 +89,10 @@ module.exports.propertiesGet = function(req, res){
     })
 }
 
+/**
+ * Add property to local infrastructure
+ * @param {object} VICINITY_COMPLIANT_PROPERTY_JSON
+ */
 module.exports.propertiesPost = function(req, res){
     let logger = new Log();
     let body = req.body;
@@ -100,8 +112,12 @@ module.exports.propertiesPost = function(req, res){
     })
 }
 
+/**
+ * Remove interaction from local infrastructure
+ * @param {string} id interaction name to be deleted
+ */
 module.exports.propertiesDelete = function(req, res){
-    let id = req.params.id || null; // If null => Use gtw credentials
+    let id = req.params.id || null; 
     let logger = new Log();
     persistance.removeInteractionObject('properties', id)
     .then((response) => {
@@ -120,8 +136,14 @@ module.exports.propertiesDelete = function(req, res){
  * POST
  * DELETE
  */
+
+/**
+ * Get registered actions in local infrastructure
+ * @param {string} id [OPTIONAL - If absent get list of all ids]
+ * @returns List of ids or object with info
+ */
 module.exports.actionsGet = function(req, res){
-    let id = req.params.id || null; // If null => Use gtw credentials
+    let id = req.params.id || null; 
     let logger = new Log();
     persistance.getConfigDetail('actions', id)
     .then((response) => {
@@ -133,6 +155,10 @@ module.exports.actionsGet = function(req, res){
     })
 }
 
+/**
+ * Add action to local infrastructure
+ * @param {object} VICINITY_COMPLIANT_PROPERTY_JSON
+ */
 module.exports.actionsPost = function(req, res){
     let logger = new Log();
     let body = req.body;
@@ -152,8 +178,12 @@ module.exports.actionsPost = function(req, res){
     })
 }
 
+/**
+ * Remove interaction from local infrastructure
+ * @param {string} id interaction name to be deleted
+ */
 module.exports.actionsDelete = function(req, res){
-    let id = req.params.id || null; // If null => Use gtw credentials
+    let id = req.params.id || null;
     let logger = new Log();
     persistance.removeInteractionObject('actions', id)
     .then((response) => {
@@ -172,8 +202,14 @@ module.exports.actionsDelete = function(req, res){
  * POST
  * DELETE
  */
+
+/**
+ * Get registered events in local infrastructure
+ * @param {string} id [OPTIONAL - If absent get list of all ids]
+ * @returns List of ids or object with info
+ */
 module.exports.eventsGet = function(req, res){
-    let id = req.params.id || null; // If null => Use gtw credentials
+    let id = req.params.id || null;
     let logger = new Log();
     persistance.getConfigDetail('events', id)
     .then((response) => {
@@ -185,6 +221,10 @@ module.exports.eventsGet = function(req, res){
     })
 }
 
+/**
+ * Add event to local infrastructure
+ * @param {object} VICINITY_COMPLIANT_PROPERTY_JSON
+ */
 module.exports.eventsPost = function(req, res){
     let logger = new Log();
     let body = req.body;
@@ -204,8 +244,12 @@ module.exports.eventsPost = function(req, res){
     })
 }
 
+/**
+ * Remove interaction from local infrastructure
+ * @param {string} id interaction name to be deleted
+ */
 module.exports.eventsDelete = function(req, res){
-    let id = req.params.id || null; // If null => Use gtw credentials
+    let id = req.params.id || null;
     let logger = new Log();
     persistance.removeInteractionObject('events', id)
     .then((response) => {
@@ -220,6 +264,10 @@ module.exports.eventsDelete = function(req, res){
 
 // IMPORT/EXPORT endpoints
 
+/**
+ * Imports from ./agent/imports
+ * If file does not exist it fails
+ */
 module.exports.importFile = function(req, res){
     let path = req.path;
     let n = path.lastIndexOf('/');
@@ -235,6 +283,9 @@ module.exports.importFile = function(req, res){
     })
 }
 
+/**
+ * Exports to ./agent/imports
+ */
 module.exports.exportFile = function(req, res){
     let path = req.path;
     let n = path.lastIndexOf('/');
@@ -252,6 +303,11 @@ module.exports.exportFile = function(req, res){
 
 // MQTT endpoints
 
+/**
+ * MQTT controller
+ * For subscribe and unsubscribe add body
+ * @param {object} {"topic": "", "event": ""}
+ */
 module.exports.mqttController = function(req, res){
     let path = req.path;
     let body = req.body || null;
@@ -268,6 +324,10 @@ module.exports.mqttController = function(req, res){
 
 // HEALTHCHECK endpoints
 
+/**
+ * Get connection status of main adapter components
+ * @returns {'Redis' : string, 'Gateway': string, 'NodeApp': string}
+ */
   module.exports.healthcheck = async function(req, res){
     let redisHealth = await persistance.redisHealth();
     let gtwHealth = await gateway.health();

@@ -3,7 +3,6 @@ const resp = require("../_classes/response");
 const myTimer = require("../_classes/timer");
 const Request = require('../_classes/request');
 const Mqtt = require('../_classes/mqtt');
-const mqtt = require('mqtt');
 
 // Mocking functions
 jest.mock('got');

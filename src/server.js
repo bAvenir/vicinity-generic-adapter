@@ -11,8 +11,8 @@ const express = require('express'),
   bodyParser = require('body-parser'),
   cors = require('cors'),
   cookieParser = require('cookie-parser'),
-//   rateLimit = require('express-rate-limit'), // Consider adding or use NGINX
-  helmet = require('helmet');
+  helmet = require('helmet'),
+  swaggerUi = require('swagger-ui-express');
 
 // Configure express to work with proxy and rate-limit
 // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
@@ -22,6 +22,13 @@ server.set('trust proxy', 1);
 // Load loggers
 const morgan = require('morgan'),
 logger = require('./_utils/logger');
+
+// Load swagger docs
+const swaggerDocument = require('../docs/swagger.json');
+let swagger_options = {
+  customCss: '.swagger-ui .topbar { display: none }',
+  
+};
 
 // Load configuration
 const config = require('./_configuration/configuration');
@@ -43,6 +50,7 @@ server.use(cors())
 // @TODO set up IP rate-limiter for necessary endpoints (NGINX alternative)
 server.use('/agent', agent);
 server.use('/api', api);
+server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swagger_options));
 
 // error handler 
 // @TODO Build in separate module

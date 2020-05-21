@@ -12,7 +12,7 @@ let controller = require('./controllers');
 router
   // ADMINISTRATION endpoints
   .get('/configuration', controller.getConfiguration)
-  .post('/configuration', controller.reloadConfiguration)
+  // .post('/configuration', controller.reloadConfiguration)
   // .put('/configuration', controller.updateConfiguration)
   // .delete('/configuration', controller.removeConfiguration)
   .get('/registrations', controller.registrations)
