@@ -24,8 +24,8 @@ router
     // ***** Consume remote resources *****
   .get('/properties/:id/:oid/:pid', controller.getProperty) // Request remote property
   .put('/properties/:id/:oid/:pid', controller.putProperty) // Update remote property
-  .get('/properties/all', controller.getAutoPropertiesEnable)
-  .delete('/properties/all',controller.getAutoPropertiesDisable)
+  .get('/properties/autorequest', controller.getAutoPropertiesEnable)
+  .delete('/properties/autorequest',controller.getAutoPropertiesDisable)
   // .get('/actions/:id/:oid/:aid/:tid') // Get action status
   // .post('/actions/:id/:oid/:aid') // Start task on remote action
   // .put('/actions/:id/:oid/:aid') // Update status of task
@@ -36,6 +36,8 @@ router
   .get('/events/remote/:id/:oid/:eid', controller.statusRemoteEventChannel) // Get status of a remote event channel
   .post('/events/remote/:id/:oid/:eid', controller.subscribeRemoteEventChannel) // Subscribe to remote event channel
   .delete('/events/remote/:id/:oid/:eid', controller.unsubscribeRemoteEventChannel) // Unsubscribe to remote event channel
+  .get('/events/subscribe', controller.eventsSubscribeAll)
+  .delete('/events/subscribe',controller.eventsUnsubscribeAll)
     // ***** Gateway proxy *****
   .get('/objects/:id/properties/:pid', cache.getCached, controller.proxyGetProperty) // receive property request from gtw
   .put('/objects/:id/properties/:pid', controller.proxySetProperty) // receive request to upd property from gtw

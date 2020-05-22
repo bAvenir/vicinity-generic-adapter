@@ -8,6 +8,7 @@
 const Log = require('../_classes/logger');
 const gtwInterface = require('./interface');
 const services = require('./services');
+const agent = require('../_agent/agent');
 const adapter = require('../_adapters/interface');
 
 /**
@@ -348,7 +349,7 @@ module.exports.discovery = function(req, res){
         res.send('Event received');
     }
 
-    // Get all properties automatically
+    // Get all properties automatically (in mapper.json)
 
     module.exports.getAutoPropertiesEnable = function(req, res){
         adapter.startPropertiesCollection();
@@ -358,4 +359,26 @@ module.exports.discovery = function(req, res){
     module.exports.getAutoPropertiesDisable = function(req, res){
         adapter.stopPropertiesCollection();
         res.send('Automatic data collection disabled');
+    }
+
+    // Subscribe all events (in mapper.json)
+
+    module.exports.eventsSubscribeAll = function(req, res){
+        agent.subscribeEvents()
+        .then(() => {
+            res.json({error: false, message: 'Events subscribed'})
+        })
+        .catch((err) => {
+            res.json(err)
+        }) 
+    }
+
+    module.exports.eventsUnsubscribeAll = function(req, res){
+        agent.unsubscribeEvents()
+        .then(() => {
+            res.json({error: false, message: 'Events unsubscribed'})
+        })
+        .catch((err) => {
+            res.json(err)
+        }) 
     }

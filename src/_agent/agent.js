@@ -50,7 +50,7 @@ module.exports.initialize = async function(){
         logger.info('All event channels created!', 'AGENT');
 
         // Subscribe event channels
-        await this.subscribeEvents();
+        // await this.subscribeEvents(); Subscription via API
 
         // Store configuration info
         await persistance.reloadConfigInfo();
