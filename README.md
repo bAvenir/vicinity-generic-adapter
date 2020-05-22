@@ -21,15 +21,9 @@ The first version aims to support the following interactions:
 
 ## Pre-requisites
 
-### Mandatory 
-
 * Node.js > v12
 * Docker
-
-### Recommended for full functionality
-
 * Docker-compose
-* Sonarqube server
 
 ## How to run
 
@@ -160,7 +154,7 @@ NGINX is used as a reverse proxy to improve performance of Node.js app and to te
 * Change the port of the node js server to 9997
 * Change in gateway/GatewayConfig.xml --> < agent >bavenir-adapter</ agent >
 
-### Using SSL connections to the adapter
+#### Using SSL connections to the adapter
 
 * It is possible to activate HTTPS with NGINX.
     1. Get certificates
@@ -171,7 +165,22 @@ NGINX is used as a reverse proxy to improve performance of Node.js app and to te
 
 The adapter supports the integration of MQTT data leveraging the NodeJS MQTT package. The connection, disconnection, subscription and unsubscription of channels will be handled by the adapter.
 
-The developer using the adapter will need to extend the MQTT module (./src/_adapters/_modules/mqtt.js), concretely the function _processIncomingMessage(). The task will be to parse the incoming messages based on their structure and use the prebuilt functions _sendEvent() and _registerItem() to publish the result as a VICINITY event or to register the item generating the messages if it was new.
+The developer using the adapter will need to extend the MQTT module (./src/_adapters/_modules/mqtt.js), concretely the function _processIncomingMessage(), _findMatching() and _parseMsg(). The task will be to parse the incoming messages based on their structure and use the prebuilt functions _sendEvent() and _registerItem() to publish the result as a VICINITY event or to register the item generating the messages if it was new.
+
+#### MQTT mapper file
+
+Under ./agent/imports a file with a mapping between mqtt topics and VICINITY events should be placed. This file will contain an array with the following structure:
+
+    [{ "event": "vicinity_event_defined_by_user", "topic": "mqtt_topic_with_wildcards_when_necessary"}]
+
+#### MQTT configuration variables
+
+* ADAPTER_MQTT_HOST -> Host of the MQTT service
+* ADAPTER_MQTT_USER -> User
+* ADAPTER_MQTT_PASSWORD -> Password
+* ADAPTER_MQTT_INFRASTRUCTURE_NAME -> Prefix to add to all your mqtt items to help identification
+* ADAPTER_MQTT_ITEMS_TYPE -> VICINITY item type of your your infrastructure objects emmiting the messages
+* ADAPTER_MQTT_ITEMS_EVENTS -> VICINITY event name defined by user, accepts many separated by commas, depends on how many topics you need to map
 
 ## Documentation
 

@@ -240,6 +240,13 @@ async function _processIncomingMessage(message, topic){
 
 /**
  * Find the matching VICINITY event for your MQTT channel
+ * The topic received in the MQTT message might not be "generic" if wildcards were used (+,#)
+ * In that case add the wildcard again to match the topic defined in mqtt.json
+ *
+ * In this example the third position of our topic path had a wildcard
+ * Therefore the incoming message has a device_name instead of wildcard on that position
+ * This function only replaces the device_name with the wildcard to match again the topic defined in mqtt.json
+ *
  * THIS FUNCTION SHOULD BE MODIFIED BASED ON YOUR MQTT MESSAGE STRUCTURE
  * Mappings defined in mqtt.json
  */
@@ -254,6 +261,7 @@ function _findMatching(topicParts){
 /**
  * Prepares message that will be sent through network
  * THIS FUNCTION SHOULD BE MODIFIED BASED ON YOUR MQTT MESSAGE STRUCTURE
+ * @returns {Object}
  */
 function _parseMsg(msg){
     // return { property: "test", value: 1}
