@@ -37,6 +37,8 @@ let mqtt_package = require("mqtt");
 
     disconnect(){
         this.client.end();
+        this._mqttTopics = [];
+        this._mqttItems = [];
     }
 
     /**

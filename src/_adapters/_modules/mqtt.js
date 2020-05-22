@@ -2,6 +2,7 @@ const MQTT = require('../../_classes/mqtt');
 const Log = require('../../_classes/logger');
 const config = require('../configuration');
 const gateway = require('../../_agent/interface');
+const agent = require('../../_agent/agent');
 const persistance = require('../../_persistance/interface');
 
 // Declare global objects
@@ -88,7 +89,7 @@ module.exports = functions;
  * Check if all the configuration required for running MQTT is available
  * Configuration located in .env
  */
- function _validateMqttConfig(){
+function _validateMqttConfig(){
     let flag = true;
     if(!config.mqtt.host) flag = false ;
     if(!config.mqtt.user) flag = false;
@@ -101,58 +102,16 @@ module.exports = functions;
 }
 
 /**
- * Process incoming MQTT messages
- * This function should be modified to fit the needs of each MQTT server
- * - Sends the MQTT message as VICINITY event
- * - Registers new MQTT items sending 
- * @param {String} message 
- * @param {String} topic 
- */
-async function _processIncomingMessage(message, topic){
-    logger.debug('We do nothing with the mqtt message, please define some actions...', 'MQTT');
-    // try{
-    //     let mqttItems = client.mqttItems;
-    //     // Obtain mqttItem name of sender
-    //     let topicParts = topic.split('/');
-    //     let name = topicParts[2];
-    //     logger.debug(name, 'DEBUG');
-    //     // Get OID of MQTT item or null
-    //     let oid = mqttItems[name];
-    //     logger.debug(oid, 'DEBUG');
-    //     // If OID exists --> Send message
-    //     if(oid){
-    //         // Prepare message for sending
-    //         // Obtain VICNITY eid from topic
-    //         // Send event
-    //         let topics = client.mqttTopics;
-    //         topicParts[2] = '+';
-    //         topic = topicParts.toString();
-    //         let match = topics.filter((it)=>{ return it.topic === topic; });
-    //         if(match){
-    //             _sendEvent(oid, match.event, message);
-    //         } else {
-    //             logger.debug('Topic ' + topic + ' does not have a matching event...');
-    //         }
-    //     } else {
-    //         // Prepare body for registration
-    //         // BUILD BODY with .env info about MQTT
-    //         // Request registration
-    //         _registerItem(_buildBody(name));
-    //     }
-    // } catch(err) {
-    //     logger.error(err, 'MQTT');
-    // }
-}
-
-/**
  * Gets unregistered MQTT item and sends request to VICINITY
  */
 async function _registerItem(body){
-//     try{
-//          await gateway.postRegistrations(body)
-//     } catch(err) {
-//         logger.error(err, 'MQTT');
-//     }
+    try{
+         let response = await agent.registerObject(body);
+         let newItem = {name: body.name, "oid": response[0].oid};
+         client.mqttItems = newItem;
+    } catch(err) {
+        logger.error(err, 'MQTT');
+    }
 }
 
 /**
@@ -163,11 +122,11 @@ async function _registerItem(body){
  * @param {Object} body 
  */
 async function _sendEvent(oid, eid, body){
-//     try{
-//         await gateway.publishEvent(oid, eid, body);
-//     } catch(err) {
-//         logger.error(err, 'MQTT');
-//     }
+    try{
+        await gateway.publishEvent(oid, eid, body);
+    } catch(err) {
+        logger.error(err, 'MQTT');
+    }
 }
 
 /**
@@ -217,4 +176,85 @@ function _buildBody(name){
         type: config.mqtt.itemsType,
         events: config.mqtt.itemsEvents
     }
+}
+
+/**
+ * Based on MQTT item name gets the VICINITY OID
+ */
+function _findOidOfMqttItem(name){
+    let items = client.mqttItems;
+    let id = items.findIndex((it) => {return it.name === name});
+    let result = id === -1 ? null : items[id].oid;
+    return result;
+}
+
+// FUNCTIONS TO BE MODIFIED DEPENDING ON STRUCTURE OF MQTT BODY
+
+/**
+ * Process incoming MQTT messages
+ * This function should be modified to fit the needs of each MQTT server
+ * - Sends the MQTT message as VICINITY event
+ * - Registers new MQTT items sending 
+ * @param {String} message 
+ * @param {String} topic 
+ */
+async function _processIncomingMessage(message, topic){
+    logger.debug('We do nothing with the mqtt message, please define some actions...', 'MQTT');
+    // try{
+    //     // Obtain mqttItem name of sender
+    //     let topicParts = topic.split('/');
+    //     let name = topicParts[2];
+    //     logger.debug(name, 'DEBUG');
+    //     // Get OID of MQTT item or null
+    //     let oid = _findOidOfMqttItem(config.mqtt.infrastructureName + "_" + name);
+    //     logger.debug(oid, 'DEBUG');
+    //     // If OID exists --> Send message
+    //     if(oid){
+    //         // Prepare message for sending
+    //         // Obtain VICNITY eid from topic
+    //         // Send event
+    //         let match =  _findMatching(topicParts);
+    //         if(match){
+    //             _sendEvent(oid, match.event, _parseMsg(message));
+    //         } else {
+    //             logger.debug('Topic ' + topic + ' does not have a matching event...');
+    //         }
+    //     } else {
+    //         // Prepare body for registration
+    //         // BUILD BODY with .env info about MQTT
+    //         // Request registration
+    //         await _registerItem(_buildBody(name));
+    //         oid = _findOidOfMqttItem(config.mqtt.infrastructureName + "_" + name);
+    //         if(!oid) throw new Error('There was some problem registering new item...');
+    //         let match = _findMatching(topicParts);
+    //         if(match){
+    //             _sendEvent(oid, match.event, _parseMsg(message));
+    //         } else {
+    //             logger.debug('Topic ' + topic + ' does not have a matching event...');
+    //         }
+    //     }
+    // } catch(err) {
+    //     logger.error(err, 'MQTT');
+    // }
+}
+
+/**
+ * Find the matching VICINITY event for your MQTT channel
+ * THIS FUNCTION SHOULD BE MODIFIED BASED ON YOUR MQTT MESSAGE STRUCTURE
+ * Mappings defined in mqtt.json
+ */
+function _findMatching(topicParts){
+    // let topics = client.mqttTopics;
+    // topicParts[2] = '+';
+    // let generic_topic = topicParts.join('/');
+    // let result = topics.filter((it)=>{ return it.topic === generic_topic; });
+    // return result[0];
+}
+
+/**
+ * Prepares message that will be sent through network
+ * THIS FUNCTION SHOULD BE MODIFIED BASED ON YOUR MQTT MESSAGE STRUCTURE
+ */
+function _parseMsg(msg){
+    // return { property: "test", value: 1}
 }

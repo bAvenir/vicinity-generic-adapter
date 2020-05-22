@@ -29,8 +29,8 @@ module.exports.initialize = async function(){
 
         // Load mappings and configurations
        await persistance.loadConfigurationFile('mapper');
-    //    await persistance.loadConfigurationFile('properties');
-    //    await persistance.loadConfigurationFile('events');
+       await persistance.loadConfigurationFile('properties');
+       await persistance.loadConfigurationFile('events');
 
         // Login objects
         await services.doLogins(registrations);
@@ -79,6 +79,20 @@ module.exports.stop = async function(){
     } catch(err) {
         logger.error(err, 'AGENT');
         return Promise.reject(false);
+    }
+}
+
+/**
+ * Register one object
+ * This function enables adapters to access registration services
+ * @param {Object} body
+ */    
+module.exports.registerObject = async function(body){
+    try{
+        let response = await services.registerObject(body);
+        return Promise.resolve(response);
+    }catch(err){
+        return Promise.reject(err);
     }
 }
 
