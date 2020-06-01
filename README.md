@@ -76,6 +76,7 @@ Example:
     SERVER_TIMEOUT=10000
     SERVER_MAX_PAYLOAD=100kb
     ## GATEWAY
+    #### Replace GTW_HOST by localhost if local mode
     GTW_HOST="gateway"
     GTW_PORT=8181
     GTW_CALLBACK_ROUTE=agent
@@ -102,6 +103,7 @@ Example:
     ADAPTER_MQTT_ITEMS_TYPE="core:Device"
     ADAPTER_MQTT_ITEMS_EVENTS="test"
     ## Persistance
+    #### Replace PERSISTANCE_DB_HOST by localhost if local mode
     PERSISTANCE_DB="redis"
     PERSISTANCE_DB_HOST="cache-db"
     PERSISTANCE_DB_PORT=6379

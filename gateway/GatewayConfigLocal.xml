@@ -427,14 +427,14 @@
 
 			Defaults to localhost. In DOCKER use BRIDGE connection
 			-->
-			<agent>proxy</agent>
+			<agent>localhost</agent>
 
 			<!--
 			Port on which the REST Agent listens.
 
 			Defaults to 9997.
 			-->
-			<agentPort>9997</agentPort>
+			<agentPort>3000</agentPort>
 
 		</restAgentConnector>
 

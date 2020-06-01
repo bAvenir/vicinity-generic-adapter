@@ -29,6 +29,9 @@ done
 # Start proxy container
 if [ ${MY_ENV} == "prod" ]; then
     docker-compose -f docker-compose.yml up -d
+elif [ ${MY_ENV} == "local" ]; then
+    docker-compose -f docker-compose-local.yml up -d
+    npm run dev
 else
     docker-compose -f docker-compose-dev.yml up
 fi

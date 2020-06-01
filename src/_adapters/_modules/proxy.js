@@ -4,7 +4,9 @@
  * Adapter acts as a proxy
  */
 
- const Req = require('../../_classes/request');
+ // Load VICINITY AGENT
+const vcntagent = require('bavenir-agent');
+const Req = vcntagent.classes.request;
 
  let fun = {};
 

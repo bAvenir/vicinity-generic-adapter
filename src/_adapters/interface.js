@@ -9,10 +9,13 @@
 * - Receive event from subscribed value
 */ 
 
-// Import logger
-const Log = require('../_classes/logger');
-const persistance =  require('../_persistance/interface');
-const CustomTimer = require('./propertiesTimer');
+// Load VICINITY AGENT
+const vcntagent = require('bavenir-agent');
+
+// Imports
+const Log = vcntagent.classes.logger;
+const persistance = vcntagent.persistance;
+const CustomTimer = require('./_classes/propertiesTimer');
 // Configuration Modes
 const config = require('./configuration');
 const responseMode = config.responseMode;

@@ -1,8 +1,3 @@
-const dotenv = require('dotenv');
-
-// Read configuration      
-dotenv.config();
-
 // Configuration object to export
 let config = module.exports = {};
 

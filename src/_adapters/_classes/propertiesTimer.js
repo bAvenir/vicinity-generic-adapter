@@ -5,11 +5,14 @@
  * @class
  */
 
-const config = require('./configuration');
-const gateway = require('../_agent/interface');
-const persistance = require('../_persistance/interface');
-const Log = require('../_classes/logger');
-let customTimer = require('../_classes/timer');
+// Load VICINITY AGENT
+const vcntagent = require('bavenir-agent');
+
+const config = require('../configuration');
+const gateway = vcntagent.gateway;
+const persistance = vcntagent.persistance;
+const Log = vcntagent.classes.logger;
+let customTimer = vcntagent.classes.timer;
 
  module.exports = class propertiesTimer extends customTimer{
 

@@ -1,9 +1,13 @@
-const MQTT = require('../../_classes/mqtt');
-const Log = require('../../_classes/logger');
+// Load VICINITY AGENT
+const vcntagent = require('bavenir-agent');
+
+// Imports
+const MQTT = vcntagent.classes.mqtt;
+const Log = vcntagent.classes.logger;
 const config = require('../configuration');
-const gateway = require('../../_agent/interface');
-const agent = require('../../_agent/agent');
-const persistance = require('../../_persistance/interface');
+const gateway = vcntagent.gateway;
+const agent = vcntagent.services;
+const persistance = vcntagent.persistance;
 
 // Declare global objects
 let client =  new MQTT(config.mqtt.host, config.mqtt.user, config.mqtt.password);
