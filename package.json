@@ -1,6 +1,6 @@
 {
   "name": "bAvenirAdapter",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "bAvenir generic adapter to VICINITY",
   "main": "index.js",
   "scripts": {
