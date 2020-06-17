@@ -30,7 +30,9 @@ let customTimer = vcntagent.classes.timer;
     async _action(){
         let logger = new Log();
         try{
-            let mapper = await persistance.getMappers();
+            // Loading all urls that can be called (defined in dataurls.json)
+            // Those are a combination oid + interaction + interaction_id
+            let mapper = await persistance.getItem('dataurls', null);
             logger.debug(mapper)
             for(let i=0, l=mapper.length; i<l; i++){
                 if(mapper[i].interaction === 'property'){

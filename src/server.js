@@ -26,15 +26,15 @@ server.set('trust proxy', 1);
 const Log = vcntagent.classes.logger;
 let logger = new Log();
 
-// Load swagger docs
-const swaggerDocument = require('../docs/swagger.json');
-let swagger_options = {
-  customCss: '.swagger-ui .topbar { display: none }',
-  
-};
-
 // Load configuration
 const config = require('./configuration');
+
+// Load swagger docs
+const swaggerDocument = require('../docs/swagger.json');
+const swaggerDocumentAgent = require('../node_modules/bavenir-agent/docs/swagger.json');
+let swagger_options = {
+  customCss: '.swagger-ui .topbar { display: none }'
+};
 
 // Load API
 let api = vcntagent.api.admin; // Administration API
@@ -56,7 +56,8 @@ server.use('/agent', proxy);
 server.use('/admin', api);
 server.use('/api', agent);
 server.use('/adapter', adapter);
-server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swagger_options));
+server.use('/adapterdocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swagger_options));
+server.use('/agentdocs', swaggerUi.serve, swaggerUi.setup(swaggerDocumentAgent, swagger_options));
 
 // error handler 
 // @TODO Build in separate module

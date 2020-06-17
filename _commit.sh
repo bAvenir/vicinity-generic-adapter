@@ -5,7 +5,7 @@ Where:
   Flags:
     -h  shows help
   Options with argument:
-    -v  <version>
+    -v  <version> [patch, minor, major]
     -d  <description>"
 
 #  Default configuration
@@ -33,7 +33,7 @@ if [ ${VER} != "false" ]
 then
     git add .
     git commit -m "${DESC}"
-    git tag -a ${VER} -m "${DESC}"
+    npm version ${VER}
     echo "Successfully commited. You can push now"
 else
     echo "Missing version number"

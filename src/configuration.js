@@ -3,6 +3,7 @@ let config = module.exports = {};
 
 // Argument passed to node when starting app
 config.env = process.env.NODE_ENV || 'development';
+config.rootPath = process.env.NODE_PATH || ".";
 
 if(process.env.NODE_ENV === 'development'){
     config.port = process.env.SERVER_PORT || 3000;

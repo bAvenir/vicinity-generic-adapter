@@ -14,6 +14,7 @@ const Req = vcntagent.classes.request;
         try{
             let request = new Req();
             request.setUri(url, '/get');
+            request.setMethod('POST');
             request.setBody({oid: oid, pid: pid});
             let result = await request.send();
             return Promise.resolve(result)
@@ -26,6 +27,7 @@ const Req = vcntagent.classes.request;
         try{
             let request = new Req();
             request.setUri(url, '/set');
+            request.setMethod('POST');
             request.setBody({oid: oid, pid: pid, body: body});
             let result = await request.send();
             return Promise.resolve(result)
@@ -38,6 +40,7 @@ const Req = vcntagent.classes.request;
         try{
             let request = new Req();
             request.setUri(url, '/event');
+            request.setMethod('POST');
             request.setBody({oid: oid, eid: eid, body: body});
             let result = await request.send();
             return Promise.resolve(result)

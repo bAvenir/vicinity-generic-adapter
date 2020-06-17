@@ -5,6 +5,7 @@
 */ 
 
 const mqttServices = require('../_modules/mqtt');
+const adapter = require('../interface')
 
 // MQTT Controllers
 
@@ -26,3 +27,15 @@ module.exports.mqttController = function(req, res){
         res.json({error: true, message: action + ' FAILED, find more info in the logs...'});
     }
 }
+
+    // Get all properties automatically (in mapper.json)
+
+    module.exports.getAutoPropertiesEnable = function(req, res){
+        adapter.startPropertiesCollection();
+        res.send('Automatic data collection enabled');
+    }
+
+    module.exports.getAutoPropertiesDisable = function(req, res){
+        adapter.stopPropertiesCollection();
+        res.send('Automatic data collection disabled');
+    }

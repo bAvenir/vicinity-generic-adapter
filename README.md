@@ -1,8 +1,9 @@
 # bAvenir VICINITY adapter
 
-**Current version V.1**
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/bAvenir/vicinity-generic-adapter?style=plastic)
 
 This is a Node.js project that acts as an adapter between VICINITY and other technologies or applications.
+It can be used for a quickstart integration into the VICINITY world, and also can be extended to integrate other technologies, databases or platforms.
 
 The first version aims to support the following interactions:
 
@@ -19,13 +20,27 @@ The first version aims to support the following interactions:
 * Add support to GATEWAY actions
 * Add generic adapters/support for known technologies
 
-## Pre-requisites
+# TOC
+
+1. <a href="#1"><b>Installing and running</b></a>
+2. <a href="#2"><b>Configuration</b></a>
+3. <a href="#3"><b>Components</b></a>
+4. <a href="#4"><b>Integrations</b></a>
+5. <a href="#5"><b>Documentation</b></a>
+
+<hr>
+
+<div id="1"></div>
+
+## 1 - Installing and running 
+
+### Pre-requisites
 
 * Node.js > v12
 * Docker
 * Docker-compose
 
-## How to run
+### How to run
 
 * Development mode
     * First run **npm install** in the project folder
@@ -42,14 +57,19 @@ The first version aims to support the following interactions:
     * npm run test -> for jest tests
     * npm run analyze -> for sonarqube analysis 
 
-## Linux deployment notes
+### Linux deployment notes
 
 * Change path in docker-compose file for volumes
     * Replace ./ for ~/<proj-name>/
 * Make sure Gateway folder has full permissions
 * Make sure iptables are set to make Docker subnet available
+    * Assuming Docker subnet is 172.0.0.0/8 --> iptables -A INPUT -s 172.0.0.0/8 -j ACCEPT
 
-## Configuration
+<hr>
+
+<div id="2"></div>
+
+## 2 - Configuration
 
 Use a .env file
 
@@ -59,7 +79,7 @@ Use a .env file
 
 * Only GTW_ID and GTW_PWD are **MANDATORY**, it is necessary to have valid VICINITY credentials to run the adapter
 
-* When using automatic data or events collection, it is necessary to define ADAPTER_SERVICE_OID.
+* When using automatic data or events collection, it is necessary to define ADAPTER_SERVICE_OID. It is also recommended to adjust the frequency of properties collection, defined with ADAPTER_TIMER_INTERVAL.
 
 * When using the MQTT module, it is necessary to complete the MQTT configuration section as well as extending the module with information on how to parse the incoming messages.
 
@@ -121,7 +141,13 @@ Example:
 
 Load into app using process.env.ENV_VAR and the npm package dotenv.
 
-## DOCKER
+<hr>
+
+<div id="3"></div>
+
+## 3 - Adapter Components
+
+### DOCKER
 
 The use of DOCKER is recommended. It is possible to run the Node.js app, VICINITY OGWAPI and REDIS out of DOCKER, however this configuration is not supported. 
 
@@ -131,7 +157,15 @@ The use of DOCKER is recommended. It is possible to run the Node.js app, VICINIT
     * Install REDIS
     * Install VICINITY OGWAPI
 
-## REDIS
+### AGENT (Core functionality)
+
+Generic adapter builds on bAvenir agent, which is installed as an NPM package.
+More information in GitHub:
+
+https://github.com/bAvenir/vicinity-agent
+
+
+### REDIS
 
 It is used for persisting configuration and caching common requests.
 
@@ -148,7 +182,7 @@ NOTE: In production, a redis dump is kept in the HOST machine and can be reused 
 
 It is also possible to export the in-memory data to files that can afterwards be imported. For more info check the API docs, import/export.
 
-## NGINX
+### NGINX
 
 NGINX is used as a reverse proxy to improve performance of Node.js app and to terminate SSL connections. However, it is possible to run the application without it. In order to do so: 
 
@@ -163,7 +197,13 @@ NGINX is used as a reverse proxy to improve performance of Node.js app and to te
     2. Use HTTPS configuration in nginx/nginx.conf (Uncomment and edit required sections)
     3. Add in docker-compose.yml volumes with the path of the certificates in the proxy section
 
-## MQTT
+<hr>
+
+<div id="4"></div>
+
+## 4 - Integrations
+
+### 4.1 - MQTT
 
 The adapter supports the integration of MQTT data leveraging the NodeJS MQTT package. The connection, disconnection, subscription and unsubscription of channels will be handled by the adapter.
 
@@ -184,20 +224,69 @@ Under ./agent/imports a file with a mapping between mqtt topics and VICINITY eve
 * ADAPTER_MQTT_ITEMS_TYPE -> VICINITY item type of your your infrastructure objects emmiting the messages
 * ADAPTER_MQTT_ITEMS_EVENTS -> VICINITY event name defined by user, accepts many separated by commas, depends on how many topics you need to map
 
-## Documentation
+### 4.2 - Automatic collection of data
 
-* The folder docs contains helpful resources to register and create interactions.
-* The endpoint localhost/docs displays the API specification.
+###### Events 
 
-## Includes
+* Subscribe to events:
+   1.  by defining which ones you can reach in the file dataurls.json; 
+   2.  loading them into the adapter memory, this is automatic and happens everytime the adaper restarts;
+   3.  and calling the API endpoint: GET /api/events/subscribe;
+   4.  the events will be sent to src/_adapters/interface.js (proxyReceiveEvent)
+   5.  You can extend the adapter to do something with the event or use the proxy mode (See below)
 
-* Management of VICINITY OGWAPI lifecycle
-* Reverse Proxy NGINX
-* DOCKER configuration
-* Persistance and caching REDIS
-* MQTT module
-* Module for automatic collection of data using NodeJS timers
-* Built-in CI with DOCKER
-* Testing
-* Security features 
-* Sonarqube scanner
+###### Properties
+
+* Collect properties:
+    1. define which properties you need to collect in the file dataurls.json;
+    2. loading them into the adapter memory, this is automatic and happens everytime the adaper restarts;
+    3. Start the autocollection: GET /adapter/properties/autorequest
+    4. A node JS timer will handle the requests;
+    5. the result of the calls will be send to src/_adapters/_classes/propertiesTimer.js, where you can define what to do by extending the funtion _action.
+
+### 4.3 - Integrate your own app or technology
+
+Integrate some software and have it ready to:
+
+* Respond to property requests
+* Publish events
+* Request properties
+* Listen to event channels
+* Other actions defined in API specification (See last section) 
+
+#### Using API and proxy
+
+1. Set up proxy mode in configuration: ADAPTER_DATA_COLLECTION_MODE="proxy"
+2. Define where your app is listning:  ADAPTER_PROXY_URL="http://192.168.0.1:8000/proxy"
+3. Subscribe to events:
+   1.  by defining which ones you can reach in the file dataurls.json; 
+   2.  loading them into the adapter memory, this is automatic and happens everytime the adaper restarts;
+   3.  and calling the API endpoint: GET /api/events/subscribe;
+   4.  the events will be sent to your proxy address on the endpoint "POST /event". In the body of the message you will receive {oid: oid, pid: pid, body: body}
+4. Your event channels: The adapter will automatically create your event channels based on your registered devices. In order to publish a message use: PUT /api/events/local/{id}/{eid}
+5. To request a property of some remote device use the endpoint: GET /api/properties/{id}/{oid}/{pid} (or PUT to update property)
+6. If someone requests one of your exposed properties, the message will be redirected to your proxy address on the endpoint "POST /get", "POST /put" for updating a property. In the body of the message you will receive {oid: oid, pid: pid, body: body}
+7. Follow the API specification to see what other things can be done. (See last section)
+
+See API specification for more info about how to use each endpoint.
+
+#### Extend the adapter
+
+You can make use of the Agent functions and a custom defined data model "mappers" to build extensions. The recommendation is to use this generic Adapter as development platform.
+
+See the documentation of the Agent for info about the available resources: https://github.com/bAvenir/vicinity-agent
+
+See docs/documentation.md for info on mappers model.
+
+<hr>
+
+<div id="5"></div>
+
+## 5 - Additional Documentation
+
+* The folder docs/ contains helpful resources to create registrations and interaction files.
+    * documentation.md: Shows how to perform some basic tasks and how to load files into the adapter memory.
+    * registrations.md: How to register/unregister
+    * properties.md, actions.md, events.md: Examples of how to define interacion patterns.
+* The endpoint localhost/agentdocs displays the API specification for the agent.
+* The endpoint localhost/adapterdocs displays the API specification for the adapter.
