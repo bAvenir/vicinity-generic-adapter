@@ -23,4 +23,4 @@ config.mqtt.user = process.env.ADAPTER_MQTT_USER || null;
 config.mqtt.password = process.env.ADAPTER_MQTT_PASSWORD || null;
 config.mqtt.infrastructureName = process.env.ADAPTER_MQTT_INFRASTRUCTURE_NAME|| null;
 config.mqtt.itemsType = process.env.ADAPTER_MQTT_ITEMS_TYPE || null;
-config.mqtt.itemsEvents = process.env.ADAPTER_MQTT_ITEMS_EVENTS.split(',') || "";
+config.mqtt.itemsEvents = process.env.ADAPTER_MQTT_ITEMS_EVENTS != null ? process.env.ADAPTER_MQTT_ITEMS_EVENTS.split(',') : "";
