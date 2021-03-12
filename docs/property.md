@@ -23,7 +23,7 @@
                     "name": "time",
                     "predicate": "core:timestamp",
                     "schema": {
-                        "type": "long"
+                        "type": "integer"
                     }
                 }
             ]

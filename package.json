@@ -4,7 +4,7 @@
   "description": "bAvenir generic adapter to VICINITY",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=/Users/jorgealmela/Documents/Projects/CrossProject/Adapters/bavenir-adapter node index.js",
+    "start": "node index.js",
     "dev": "nodemon --ignore '**/*.json' index.js",
     "test": "jest --coverage",
     "analyze": "node sonar-scanner.js"
@@ -20,22 +20,22 @@
   "author": "Jorge Almela",
   "license": "MIT",
   "dependencies": {
-    "bavenir-agent": "^1.0.0",
+    "bavenir-agent": "^1.1.7",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "helmet": "^3.22.0",
+    "helmet": "^3.23.3",
     "path": "^0.12.7",
     "stoppable": "^1.1.0",
-    "swagger-ui-express": "^4.1.4"
+    "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
-    "jest": "^25.2.4",
+    "jest": "^25.5.4",
     "jest-sonar-reporter": "^2.0.0",
-    "nodemon": "^2.0.2",
-    "sonarqube-scanner": "^2.6.0"
+    "nodemon": "^2.0.7",
+    "sonarqube-scanner": "^2.8.0"
   },
   "jest": {
     "testEnvironment": "node",

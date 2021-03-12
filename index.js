@@ -34,6 +34,7 @@ function startServer() {
   server = stoppable(app.listen(config.port, config.ip, function () {
     // Server started
     logger.info('Webserver is ready in port: ' + config.port, 'MAIN');
+    logger.info('App root path is: ' + config.rootPath)
     bootstrap(); // Initialize everything else
   }), 3000);
   // Listening for HTTP server errors

@@ -3,7 +3,7 @@
 {
     "name": "human-readable-object-name", #MANDATORY
     "type": "VICINITY-type", #MANDATORY
-    "adapter-id": "ID-in-local-infrastructure",   #MANDATORY
+    "adapterId": "ID-in-local-infrastructure",   #MANDATORY
     "properties": ["pid-1", ..., "pid-n"], #OPTIONAL
     "events": ["eid-1", ..., "eid-n"], #OPTIONAL
     "actions": ["aid-1", ..., "aid-n"], #OPTIONAL
