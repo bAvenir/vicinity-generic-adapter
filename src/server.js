@@ -31,7 +31,6 @@ const config = require('./configuration');
 
 // Load swagger docs
 const swaggerDocument = require('../docs/swagger.json');
-const swaggerDocumentAgent = require('../node_modules/bavenir-agent/docs/swagger.json');
 let swagger_options = {
   customCss: '.swagger-ui .topbar { display: none }'
 };
@@ -56,8 +55,7 @@ server.use('/agent', proxy);
 server.use('/admin', api);
 server.use('/api', agent);
 server.use('/adapter', adapter);
-server.use('/adapterdocs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swagger_options));
-server.use('/agentdocs', swaggerUi.serve, swaggerUi.setup(swaggerDocumentAgent, swagger_options));
+server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swagger_options));
 
 // error handler 
 // @TODO Build in separate module
