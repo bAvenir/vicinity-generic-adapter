@@ -3,12 +3,14 @@ version: '2.4'
 services:
   bavenir-adapter:
     container_name: bavenir-adapter
-    build:
-      dockerfile: Dockerfile
-      context: .
-      target: prod
+    image: registry.bavenir.eu/bavenir-adapter:dev
+    # build:
+    #   dockerfile: Dockerfile
+    #   context: .
+    #   target: dev
     volumes:
     - ./.env:/app/.env:ro
+    # - .:/app:delegated
     depends_on:
       cache-db:
         condition: service_healthy

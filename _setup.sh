@@ -43,9 +43,4 @@ docker rm proxy bavenir-adapter gateway cache-db
 docker rmi bavenir-adapter_bavenir-adapter
 docker rm $(docker ps -a -q) # Remove zombi containers
 
-# Start proxy container
-if [ ${MY_ENV} == "prod" ]; then
-    docker-compose -f docker-compose.yml up
-else
-    docker-compose -f docker-compose-dev.yml up
-fi
+docker-compose up

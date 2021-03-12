@@ -39,8 +39,18 @@ The first version aims to support the following interactions:
 * Node.js > v12
 * Docker
 * Docker-compose
+* Having a VICINITY account with an access point (For gateway credentials) 
+    * Steps 1 and 2 --> https://medium.com/vicinity-h2020/lesson-building-your-first-infrastructure-connected-to-vicinity-279cf0446c6c
 
-### How to run
+### How to run (QUICK START)
+
+1. Move to the folder _ready2use/
+2. Create a .env file using the example in docs/env-file-example.md
+3. Update the .env with your gateway credentials ( GTW_ID and GTW_PWD )
+4. Run ./start.sh
+5. To stop, run ./stop.sh
+
+### How to run (Developers)
 
 * Development mode
     * First run **npm install** in the project folder
@@ -73,73 +83,21 @@ The first version aims to support the following interactions:
 
 Use a .env file
 
+Example: Available in docs/env/file-example.md
+
+Load into app using process.env.ENV_VAR and the npm package dotenv.
+
 * ENV_VAR=SOMETHING
 
 * Most of the configuration parameters from the example can be reused for production deployment
 
-* Only GTW_ID and GTW_PWD are **MANDATORY**, it is necessary to have valid VICINITY credentials to run the adapter
+* Only GTW_ID and GTW_PWD are **MANDATORY**, it is necessary to have valid VICINITY credentials to run the adapter, the rest of the GATEWAY section can run with default values.
 
 * When using automatic data or events collection, it is necessary to define ADAPTER_SERVICE_OID. It is also recommended to adjust the frequency of properties collection, defined with ADAPTER_TIMER_INTERVAL.
 
 * When using the MQTT module, it is necessary to complete the MQTT configuration section as well as extending the module with information on how to parse the incoming messages.
 
 * SONARQUBE section is not mandatory, add only if you use a sonarqube server for static analysis
-
-Example:
-
-    # Configuration
-    #### Environments ["development", "production"]
-    NODE_ENV=production
-    ## SERVER
-    SERVER_PORT=3000
-    SERVER_IP=0.0.0.0
-    SERVER_TIMEOUT=10000
-    SERVER_MAX_PAYLOAD=100kb
-    ## GATEWAY
-    #### Replace GTW_HOST by localhost if local mode
-    GTW_HOST="gateway"
-    GTW_PORT=8181
-    GTW_CALLBACK_ROUTE=agent
-    GTW_ROUTE=api
-    GTW_TIMEOUT=10000
-    #### Add your credentials below, obtain them in the Neighbourhood Manager
-    GTW_ID=""
-    GTW_PWD=""
-    ## ADAPTER
-    #### OID used for collecting data credentials
-    ADAPTER_SERVICE_OID=""
-    #### Response Modes ["dummy", "proxy"]
-    ADAPTER_RESPONSE_MODE="dummy"
-    #### Collection Modes ["dummy", "proxy"]
-    ADAPTER_DATA_COLLECTION_MODE="dummy"
-    ADAPTER_PROXY_URL="http://192.168.0.1:8000/proxy"
-    #### Default timer interval 15min = 90000sec
-    ADAPTER_TIMER_INTERVAL=90000
-    #### ADAPTER MQTT
-    ADAPTER_MQTT_HOST="host"
-    ADAPTER_MQTT_USER="user"
-    ADAPTER_MQTT_PASSWORD="password"
-    ADAPTER_MQTT_INFRASTRUCTURE_NAME="MQTTTEST"
-    ADAPTER_MQTT_ITEMS_TYPE="core:Device"
-    ADAPTER_MQTT_ITEMS_EVENTS="test"
-    ## Persistance
-    #### Replace PERSISTANCE_DB_HOST by localhost if local mode
-    PERSISTANCE_DB="redis"
-    PERSISTANCE_DB_HOST="cache-db"
-    PERSISTANCE_DB_PORT=6379
-    PERSISTANCE_CACHE="enabled"
-    PERSISTANCE_CACHE_TTL=60
-    ## Sonar-scanner
-    SONAR_URL=http://localhost:9000
-    SONAR_TOKEN=<ADD_YOUR_TOKEN>
-    SONAR_PROJECT_NAME=<ADD_YOUR_PROJECT_NAME>
-    SONAR_SOURCES=src
-    SONAR_INCLUSIONS=**
-    SONAR_TESTS=src/_test
-    SONAR_TEST_FILE_PATH=./coverage/test-reporter.xml
-    SONAR_COVERAGE_FILE_PATH=./coverage/lcov.info
-
-Load into app using process.env.ENV_VAR and the npm package dotenv.
 
 <hr>
 
@@ -257,7 +215,7 @@ Integrate some software and have it ready to:
 #### Using API and proxy
 
 1. Set up proxy mode in configuration: ADAPTER_DATA_COLLECTION_MODE="proxy"
-2. Define where your app is listning:  ADAPTER_PROXY_URL="http://192.168.0.1:8000/proxy"
+2. Define where your app is listning:  ADAPTER_PROXY_URL="http://192.168.0.1:8000/proxy" (default)
 3. Subscribe to events:
    1.  by defining which ones you can reach in the file dataurls.json; 
    2.  loading them into the adapter memory, this is automatic and happens everytime the adaper restarts;
@@ -288,5 +246,4 @@ See docs/documentation.md for info on mappers model.
     * documentation.md: Shows how to perform some basic tasks and how to load files into the adapter memory.
     * registrations.md: How to register/unregister
     * properties.md, actions.md, events.md: Examples of how to define interacion patterns.
-* The endpoint localhost/agentdocs displays the API specification for the agent.
-* The endpoint localhost/adapterdocs displays the API specification for the adapter.
+* The endpoint localhost/docs displays the API specification for the agent & adapter.

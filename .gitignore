@@ -1,5 +1,5 @@
 ## General
-.env
+**/.env
 node_modules
 .DS_Store
 .scannerwork/
@@ -7,15 +7,17 @@ coverage/
 test/
 _commands.sh
 ## Gateway files
-gateway/keystore/*.pem
-gateway/keystore/*.der
-gateway/data/
-gateway/log/
+**/gateway/keystore/*.pem
+**/gateway/keystore/*.der
+**/gateway/data/
+**/gateway/log/
 ## Agent Files
-agent/exports/
-agent/imports/
+**/agent/exports/
+**/agent/imports/
 ## Logs
-log/
-nginx/logs/
+**/log/
+**/nginx/logs/
 ## Redis
-redis/data/
+**/redis/data/
+## Support files
+buildAndpublish.sh
