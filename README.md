@@ -61,7 +61,7 @@ In the steps 6-10, inside the *.sh files are included the HTTP requests that wil
         > ./_build_.sh
    * In WINDOWS
         > docker build --tag bavenir-adapter .
-2. Move to the folder _ready2use/
+2. Move to the folder example_usecase/
     > cd example_usecase/
 3. Create a .env file using the example in docs/env-file-example.md
     > cat ../docs/env-file-example.md > .env
