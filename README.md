@@ -36,19 +36,71 @@ The first version aims to support the following interactions:
 
 ### Pre-requisites
 
-* Node.js > v12
+* GIT
+* Node.js > v12 (OPTIONAL - Recommeded in case you want to extend the adapter functionalities)
 * Docker
 * Docker-compose
+* CURL or some other tool for making HTTP requests (i.e. Postman)
 * Having a VICINITY account with an access point (For gateway credentials) 
     * Steps 1 and 2 --> https://medium.com/vicinity-h2020/lesson-building-your-first-infrastructure-connected-to-vicinity-279cf0446c6c
 
-### How to run (QUICK START)
+### Quick start with an example
 
-1. Move to the folder _ready2use/
-2. Create a .env file using the example in docs/env-file-example.md
-3. Update the .env with your gateway credentials ( GTW_ID and GTW_PWD )
-4. Run ./start.sh
-5. To stop, run ./stop.sh
+In this example we will go through some of the most important steps in VICINITY.
+
+The main purpose is to register a device and a service, and being able to read data.
+
+Other more complex scenarios like the data subscription between different organisations (contracts) are not covered.
+
+The tutorial is intended for MACOS/LINUX however some tips to run in WINDOWS are included. 
+
+In the steps 6-10, inside the *.sh files are included the HTTP requests that will be used, in WINDOWS please run them with your favourite tool.
+
+1. Build bavenir-adapter image for Docker
+   * In MACOS/LINUX
+        > ./_build_.sh
+   * In WINDOWS
+        > docker build --tag bavenir-adapter .
+2. Move to the folder _ready2use/
+    > cd example_usecase/
+3. Create a .env file using the example in docs/env-file-example.md
+    > cat ../docs/env-file-example.md > .env
+4. Update the .env with your gateway credentials ( GTW_ID and GTW_PWD )
+    * Add your access point id to GTW_ID
+    * Add your access point password to GTW_PWD
+    * Update the ADAPTER_PROXY_URL with "http://mockserver:5000/api" or your the address of the service you want to adapt.
+    * Update ADAPTER_RESPONSE_MODE="proxy" to enable the proxy mode
+5. Run adapter with mockserver
+   * In MACOS/LINUX
+        > ./start-mock.sh
+   * In WINDOWS
+        * Create the folders that appear in the file start-mock.sh and then:
+        > docker-compose -f 'docker-compose-mock.yml' up
+6. Register a property
+    > ./requests/register-property.sh 
+7. Register a device
+    > ./requests/register-device.sh
+8. Register a service
+    > ./requests/register-service.sh
+9. Discover your local infrastructure (What was registered using your gateway credentials)
+    > ./requests/local-discovery.sh
+    * You should see the object descriptions of your device and service
+10. Discover what your service can see
+    > ./requests/discover-neighbourhood.sh
+    * You should receive an empty array
+11. Enable service and device
+    * Follow the Step 7 of https://medium.com/vicinity-h2020/lesson-building-your-first-infrastructure-connected-to-vicinity-279cf0446c6c 
+12. Rediscover what your service can see
+     > ./requests/discover-neighbourhood.sh
+    * You should receive an array with the ids of the items visible for your service (With data access)
+13. Read your device property using your service
+    * You need to provide your service oid, your device oid and your device pid "batteryLevel"
+    > ./request/read-property.sh
+    * You should receive a message with a value, timestamp and description.
+14. Find what else can the Agent API offer:
+    * Open http://localhost/docs in any browser to review the adapter API
+15. To stop, run ./stop.sh
+    > docker-compose -f 'docker-compose-mock.yml' down
 
 ### How to run (Developers)
 
@@ -60,12 +112,12 @@ The first version aims to support the following interactions:
 
 * Production mode
     * ./_setup.sh -e prod --> Build and run production mode
-    * ./_run.sh --> Run
+    * ./_run.sh  -e prod --> Run
     * ./_stop.sh --> Stop without destroying docker image
   
 * Run development tools
     * npm run test -> for jest tests
-    * npm run analyze -> for sonarqube analysis 
+    * npm run analyze -> for sonarqube analysis
 
 ### Linux deployment notes
 
